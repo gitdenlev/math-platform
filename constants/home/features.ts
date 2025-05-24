@@ -11,7 +11,7 @@ export const features = [
     title: "Докладний довідник",
     description:
       "Повний математичний довідник з формулами, теоремами та візуальними поясненнями",
-    color: "bg-green-500",
+    color: "bg-emerald-500",
   },
   {
     icon: "mdi:flask-outline",

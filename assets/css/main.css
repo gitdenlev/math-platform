@@ -1,14 +1,20 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-button {
-  @apply cursor-pointer bg-green-600 text-white hover:bg-green-600/90;
+*::selection {
+  @apply bg-emerald-600 text-white;
 }
 
-
-
-
-
-html.light body {
-  @apply bg-green-50 text-gray-600;
+body {
+  @apply bg-emerald-50 text-gray-600;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply text-emerald-600;
+}
+

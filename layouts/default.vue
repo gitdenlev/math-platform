@@ -1,7 +1,9 @@
 <template>
-  <main class="container p-6 mx-auto">
-    <Header />
-    <slot />
-    <Footer />
-  </main>
+    <HumanifyHeader />
+    <main class="container p-6 mx-auto">
+      <slot />
+      <HumanifyFooter />
+    </main>
 </template>
+
+
