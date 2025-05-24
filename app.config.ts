@@ -10,6 +10,7 @@ export default defineAppConfig({
         color: "emerald",
       },
     },
+    // Customizing the badge component
     badge: {
       slots: {
         base: "bg-emerald-600 text-white !rounded-full",
