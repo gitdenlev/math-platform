@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { CategoryTask, ProblemDifficulty } from "~/types";
-import { ref, computed } from "vue";
+import type { ProblemDifficulty } from "~/types"; // Припускаю, що CategoryTask не потрібен, якщо categories статичні
+import { ref, computed } from "vue"; // onMounted більше не потрібен
 
 // Типи для категорій та складності задач
 interface Task {
@@ -30,115 +30,117 @@ const difficultyLevels = ref([
   { value: "hard", label: "Складний", color: "error" },
 ]);
 
-// Задачі
+// --- Фейкові дані для задач ---
 const tasks = ref<Task[]>([
   {
     id: 1,
-    title: "Порахувати суму чисел",
-    description:
-      "Напишіть функцію для розв'язання лінійних рівнянь виду ax + b = c",
+    title: "Рівняння з однією змінною",
+    description: "Розв'яжіть лінійне рівняння 2x + 5 = 11.",
     category: "algebra",
-    tags: ["арифметика"],
+    tags: ["лінійні", "одна змінна"],
     difficulty: "easy",
-    completionRate: 0,
-    solvedCount: 2345,
-    timeEstimate: 10,
+    completionRate: 95,
+    solvedCount: 1200,
+    timeEstimate: 5,
   },
   {
     id: 2,
-    title: "Обчислення площі трикутника",
-    description:
-      "Реалізуйте функцію для обчислення площі трикутника за координатами його вершин",
+    title: "Площа трикутника",
+    description: "Знайдіть площу трикутника зі сторонами 3, 4, 5.",
     category: "geometry",
-    tags: ["трикутник", "площа", "координати"],
-    difficulty: "medium",
-    completionRate: 65,
-    solvedCount: 1852,
-    timeEstimate: 15,
+    tags: ["площа", "прямокутний"],
+    difficulty: "easy",
+    completionRate: 88,
+    solvedCount: 950,
+    timeEstimate: 7,
   },
   {
     id: 3,
-    title: "Знаходження НСД і НСК",
-    description:
-      "Створіть алгоритм для знаходження найбільшого спільного дільника та найменшого спільного кратного двох чисел",
-    category: "arithmetic",
-    tags: ["НСД", "НСК", "алгоритм Евкліда"],
-    difficulty: "easy",
-    completionRate: 82,
-    solvedCount: 3102,
+    title: "Похідна функції",
+    description: "Знайдіть похідну функції f(x) = x^3 - 2x + 1.",
+    category: "calculus",
+    tags: ["диференціювання", "многочлен"],
+    difficulty: "medium",
+    completionRate: 72,
+    solvedCount: 610,
     timeEstimate: 12,
   },
   {
     id: 4,
-    title: "Обчислення визначеного інтеграла",
-    description:
-      "Розробіть функцію для наближеного обчислення визначеного інтеграла за методом трапецій",
-    category: "calculus",
-    tags: ["інтеграл", "метод трапецій", "числові методи"],
-    difficulty: "hard",
-    completionRate: 43,
-    solvedCount: 876,
-    timeEstimate: 25,
-  },
-  {
-    id: 5,
-    title: "Знаходження медіани і моди набору даних",
-    description:
-      "Напишіть програму для обчислення медіани та моди для заданого набору числових даних",
-    category: "statistics",
-    tags: ["медіана", "мода", "статистика"],
-    difficulty: "medium",
-    completionRate: 59,
-    solvedCount: 1423,
-    timeEstimate: 18,
-  },
-  {
-    id: 6,
-    title: "Алгоритм пошуку в графі",
-    description:
-      "Реалізуйте алгоритм пошуку в ширину для знаходження найкоротшого шляху в графі",
-    category: "discrete",
-    tags: ["граф", "BFS", "шлях", "алгоритми"],
-    difficulty: "hard",
-    completionRate: 37,
-    solvedCount: 645,
-    timeEstimate: 30,
-  },
-  {
-    id: 7,
-    title: "Розв'язання системи лінійних рівнянь",
-    description:
-      "Створіть програму для розв'язання системи лінійних рівнянь методом Гаусса",
+    title: "Система лінійних рівнянь",
+    description: "Розв'яжіть систему: x + y = 5, 2x - y = 1.",
     category: "algebra",
-    tags: ["системи рівнянь", "метод Гаусса", "матриці"],
-    difficulty: "hard",
-    completionRate: 41,
-    solvedCount: 728,
-    timeEstimate: 28,
-  },
-  {
-    id: 8,
-    title: "Обчислення скалярного добутку векторів",
-    description:
-      "Реалізуйте функцію для обчислення скалярного добутку двох векторів у n-вимірному просторі",
-    category: "geometry",
-    tags: ["вектори", "скалярний добуток", "лінійна алгебра"],
+    tags: ["система", "лінійні"],
     difficulty: "medium",
-    completionRate: 68,
-    solvedCount: 1562,
+    completionRate: 65,
+    solvedCount: 480,
     timeEstimate: 15,
   },
   {
-    id: 9,
-    title: "Перевірка числа на простоту",
-    description:
-      "Розробіть ефективний алгоритм для перевірки, чи є задане число простим",
-    category: "arithmetic",
-    tags: ["прості числа", "алгоритми", "теорія чисел"],
-    difficulty: "medium",
-    completionRate: 74,
-    solvedCount: 2018,
+    id: 5,
+    title: "Теорема Піфагора",
+    description: "У прямокутному трикутнику катети 6 і 8. Знайдіть гіпотенузу.",
+    category: "geometry",
+    tags: ["прямокутний", "теорема"],
+    difficulty: "easy",
+    completionRate: 91,
+    solvedCount: 1100,
+    timeEstimate: 6,
+  },
+  {
+    id: 6,
+    title: "Інтеграл функції",
+    description: "Обчисліть визначений інтеграл від 0 до 1 функції f(x) = x^2.",
+    category: "calculus",
+    tags: ["інтегрування", "визначений"],
+    difficulty: "hard",
+    completionRate: 45,
+    solvedCount: 230,
     timeEstimate: 20,
+  },
+  {
+    id: 7,
+    title: "Множення матриць",
+    description: "Перемножте дві матриці 2x2.",
+    category: "discrete",
+    tags: ["матриці", "лінійна алгебра"],
+    difficulty: "medium",
+    completionRate: 58,
+    solvedCount: 350,
+    timeEstimate: 18,
+  },
+  {
+    id: 8,
+    title: "Ймовірність події",
+    description: "Обчисліть ймовірність випадання парного числа при киданні кубика.",
+    category: "statistics",
+    tags: ["ймовірність", "базові"],
+    difficulty: "easy",
+    completionRate: 85,
+    solvedCount: 780,
+    timeEstimate: 5,
+  },
+  {
+    id: 9,
+    title: "Розв'язання квадратного рівняння",
+    description: "Розв'яжіть рівняння x^2 - 5x + 6 = 0.",
+    category: "algebra",
+    tags: ["квадратні", "дискримінант"],
+    difficulty: "medium",
+    completionRate: 78,
+    solvedCount: 820,
+    timeEstimate: 10,
+  },
+  {
+    id: 10,
+    title: "Об'єм циліндра",
+    description: "Знайдіть об'єм циліндра з радіусом 3 і висотою 7.",
+    category: "geometry",
+    tags: ["об'єм", "3D"],
+    difficulty: "medium",
+    completionRate: 68,
+    solvedCount: 410,
+    timeEstimate: 10,
   },
 ]);
 
@@ -153,8 +155,8 @@ const sortOrder = ref("desc"); // asc, desc
 
 // Фільтрація задач
 const filteredTasks = computed(() => {
+  // Тепер немає isLoading, завжди повертаємо відфільтровані задачі
   return tasks.value.filter((task) => {
-    // Фільтр за пошуковим запитом
     const matchesSearch =
       searchQuery.value === "" ||
       task.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
@@ -165,12 +167,10 @@ const filteredTasks = computed(() => {
         tag.toLowerCase().includes(searchQuery.value.toLowerCase())
       );
 
-    // Фільтр за категоріями
     const matchesCategory =
       selectedCategories.value.length === 0 ||
       selectedCategories.value.includes(task.category);
 
-    // Фільтр за складністю
     const matchesDifficulty =
       selectedDifficulty.value.length === 0 ||
       selectedDifficulty.value.includes(task.difficulty);
@@ -181,6 +181,7 @@ const filteredTasks = computed(() => {
 
 // Відсортовані задачі
 const sortedTasks = computed(() => {
+  // Тепер немає isLoading, завжди повертаємо відсортовані задачі
   return [...filteredTasks.value].sort((a, b) => {
     let comparison = 0;
 
@@ -188,13 +189,18 @@ const sortedTasks = computed(() => {
       comparison = b.solvedCount - a.solvedCount;
     } else if (sortBy.value === "difficulty") {
       const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
-      comparison =
-        difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+      // @ts-ignore - TypeScript може не знати, що a.difficulty/b.difficulty є ключами difficultyOrder
+      comparison = difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
     } else if (sortBy.value === "completion") {
       comparison = b.completionRate - a.completionRate;
     }
+    // Додамо сортування за новизною (за ID, якщо created_at не передається/не використовується тут)
+    else if (sortBy.value === "newest") {
+       comparison = b.id - a.id; // Припускаючи, що більший ID означає новішу задачу
+    }
 
-    return sortOrder.value === "asc" ? comparison * -1 : comparison;
+
+    return sortOrder.value === "asc" ? comparison : comparison * -1; // Змінено логіку для 'asc'
   });
 });
 
@@ -223,6 +229,8 @@ const resetFilters = () => {
   searchQuery.value = "";
   selectedCategories.value = [];
   selectedDifficulty.value = [];
+  sortBy.value = "popularity"; // Можна скинути і сортування
+  sortOrder.value = "desc";
 };
 
 const getDifficultyColor = (difficulty: string): string => {
@@ -239,16 +247,25 @@ useHead({
     {
       name: "description",
       content:
-        "Математичні задачі різного рівня складності з можливістю розв'язання за допомогою бібліотеки Math.js.",
+        "Математичні задачі різного рівня складності з можливістю розв'язання.",
     },
   ],
+});
+
+// Пагінація
+const currentPage = ref(1); // Додаємо стан поточної сторінки
+const itemsPerPage = 9; // Кількість елементів на сторінці
+
+const paginatedTasks = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return sortedTasks.value.slice(startIndex, endIndex);
 });
 </script>
 
 <template>
   <Header />
   <NuxtLayout name="default">
-    <!-- Hero Section з анімованим фоном -->
     <section class="relative overflow-hidden">
       <div class="text-center py-12 relative z-10">
         <h1
@@ -261,13 +278,12 @@ useHead({
           та інших розділів математики за допомогою інтерактивних задач
         </p>
 
-        <!-- Статистика -->
         <div class="flex flex-wrap justify-center gap-8 mt-10">
           <div class="text-center">
             <div
               class="text-3xl font-bold bg-gradient-to-r from-emerald-700 to-green-500 bg-clip-text text-transparent"
             >
-              9+
+              {{ tasks.length }}+
             </div>
             <div class="text-sm mt-1">Задач</div>
           </div>
@@ -275,7 +291,7 @@ useHead({
             <div
               class="text-3xl font-bold bg-gradient-to-r from-emerald-700 to-green-500 bg-clip-text text-transparent"
             >
-              6
+              {{ categories.length }}
             </div>
             <div class="text-sm mt-1">Категорій</div>
           </div>
@@ -283,14 +299,13 @@ useHead({
             <div
               class="text-3xl font-bold bg-gradient-to-r from-emerald-700 to-green-500 bg-clip-text text-transparent"
             >
-              3
+              {{ difficultyLevels.length }}
             </div>
             <div class="text-sm mt-1">Рівні складності</div>
           </div>
         </div>
       </div>
 
-      <!-- Фільтри та пошук -->
       <div
         class="bg-white rounded-2xl shadow-lg p-6 mb-12 backdrop-blur-sm bg-white/80 border border-gray-100"
       >
@@ -355,6 +370,7 @@ useHead({
                   { value: 'popularity', label: 'Популярністю' },
                   { value: 'difficulty', label: 'Складністю' },
                   { value: 'completion', label: 'Успішністю рішень' },
+                  { value: 'newest', label: 'Новизною' }, // Додано опцію сортування
                 ]"
                 size="sm"
                 class="min-w-[140px]"
@@ -384,10 +400,9 @@ useHead({
         </div>
       </div>
 
-      <!-- Список задач з покращеним дизайном -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+      <div v-if="paginatedTasks.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
         <div
-          v-for="task in sortedTasks"
+          v-for="task in paginatedTasks"
           :key="task.id"
           class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col"
         >
@@ -405,7 +420,7 @@ useHead({
                 />
               </div>
 
-              <UBadge size="md">
+              <UBadge size="md" :color="getDifficultyColor(task.difficulty)">
                 {{
                   difficultyLevels.find((d) => d.value === task.difficulty)
                     ?.label
@@ -422,7 +437,8 @@ useHead({
 
             <div class="flex flex-wrap gap-2 mb-4">
               <UBadge
-                icon="ri:hashtag"
+                color="gray"
+                variant="subtle"
                 v-for="(tag, tagIndex) in task.tags"
                 :key="tagIndex"
                 size="md"
@@ -433,9 +449,12 @@ useHead({
           </div>
 
           <div class="mt-auto p-4 pt-3 border-t border-gray-100 bg-gray-50/80">
-            <UBadge icon="ri:timer-fill" size="md">
-              <span>{{ task.timeEstimate }} хвилин</span>
-            </UBadge>
+             <div class="flex justify-between items-center text-xs text-gray-500 mb-3">
+                <span><Icon name="ri:check-double-line" class="mr-1"/> {{ task.solvedCount }} розв'язано</span>
+                <span><Icon name="ri:time-line" class="mr-1"/> {{ task.timeEstimate }} хв.</span>
+             </div>
+            <UProgress :value="task.completionRate" :max="100" size="xs" color="emerald" class="mb-3"/>
+
 
             <UButton block :to="`/tasks/${task.id}`" class="mt-4">
               Розв'язати задачу
@@ -444,17 +463,16 @@ useHead({
         </div>
       </div>
 
-      <!-- Відображення коли немає знайдених задач -->
       <div
-        v-if="sortedTasks.length === 0"
+        v-if="paginatedTasks.length === 0 && (searchQuery || selectedCategories.length > 0 || selectedDifficulty.length > 0)"
         class="text-center py-16 bg-white/60 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100"
       >
-        <div class="mb-6 text-gray-300 animate-pulse">
+        <div class="mb-6 text-gray-300">
           <Icon name="mdi:magnify-empty" size="80" />
         </div>
         <h3 class="text-2xl font-bold mb-2">Задачі не знайдено</h3>
         <p class="max-w-md mx-auto mb-8">
-          Спробуйте змінити параметри пошуку або фільтри
+          Спробуйте змінити параметри пошуку або фільтри.
         </p>
         <UButton
           @click="resetFilters"
@@ -467,18 +485,20 @@ useHead({
         </UButton>
       </div>
 
-      <!-- Пагінація -->
       <div class="flex justify-center mt-12">
         <UPagination
-          v-if="sortedTasks.length > 0"
-          :total="Math.ceil(sortedTasks.length / 9)"
-          :default-page="1"
+          v-if="sortedTasks.length > itemsPerPage"
+          :total="Math.ceil(sortedTasks.length / itemsPerPage)"
+          :default-value="1"
+          :model-value="currentPage"
+          @update:model-value="currentPage = $event"
+          show-first
+          show-last
           :ui="{ rounded: 'rounded-lg' }"
           class="shadow-sm"
         />
       </div>
     </section>
-
   </NuxtLayout>
 </template>
 

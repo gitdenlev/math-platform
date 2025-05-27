@@ -96,7 +96,7 @@ const toggleTooltip = (value: boolean) => {
 
 // Стан для лічильника символів
 const solutionText = ref("");
-const maxChars = 2000;
+const maxChars = 100;
 
 // Встановлюємо заголовок сторінки
 useHead(() => ({
@@ -187,26 +187,26 @@ useHead(() => ({
 
         <div>
           <UTextarea
+            color="primary"
             id="answer"
             v-model="solutionText"
-            rows="12"
-            resize="none"
+            rows="5"
+            autoresize
             :maxlength="maxChars"
             placeholder="Почніть вводити ваше рішення тут..."
-            class="solution-textarea"
+            class="w-full bg-red-500 rounded-full shadow-sm focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300"
           />
 
-          <!-- Кнопка перевірки в правому нижньому куті -->
-          <UButton disabled icon="ri:check-fill">
-            Перевірити
-          </UButton>
-
-          <!-- Лічильник символів -->
-          <div class="character-counter">
-            <Icon name="mdi:text" size="16" class="opacity-60" />
-            <span class="counter-text"
-              >{{ solutionText.length }} / {{ maxChars }}</span
+          <div class="flex items-center justify-between mt-4">
+            <div
+              class="flex items-center gap-2 p-2 rounded-full shadow-sm bg-emerald-600 text-white"
             >
+              <Icon name="mdi:text" size="16" class="opacity-60" />
+              <span class="counter-text"
+                >{{ solutionText.length }} / {{ maxChars }}</span
+              >
+            </div>
+            <UButton class="rounded-full" disabled icon="ri:check-fill"> Перевірити </UButton>
           </div>
         </div>
       </div>
@@ -236,112 +236,3 @@ useHead(() => ({
     </UButton>
   </div>
 </template>
-
-<style scoped>
-/* Анімації та покращені стилі */
-.hover-scale {
-  transition: transform 0.3s ease;
-}
-
-.hover-scale:hover {
-  transform: scale(1.05);
-}
-
-.task-card-hover {
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.1);
-}
-
-.task-card-hover:hover {
-  box-shadow: 0 20px 40px -5px rgba(16, 185, 129, 0.2);
-  transform: translateY(-5px);
-}
-
-.category-icon-container {
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.category-icon-container:hover {
-  transform: scale(1.05);
-}
-
-.category-icon-container::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.3) 0%,
-    rgba(255, 255, 255, 0) 70%
-  );
-  transform: rotate(30deg);
-  transition: all 0.6s ease;
-}
-
-.category-icon-container:hover::before {
-  transform: rotate(0deg);
-}
-
-.difficulty-badge {
-  transition: all 0.3s ease;
-}
-
-.tag-badge {
-  background: linear-gradient(
-    to right,
-    rgba(16, 185, 129, 0.2),
-    rgba(16, 185, 129, 0.1)
-  );
-  color: #065f46;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.tag-badge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px -2px rgba(16, 185, 129, 0.15);
-}
-
-.solved-badge {
-  background: linear-gradient(
-    to right,
-    rgba(139, 92, 246, 0.2),
-    rgba(139, 92, 246, 0.1)
-  );
-  color: #5b21b6;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(139, 92, 246, 0.2);
-}
-
-.task-description {
-  transition: all 0.3s ease;
-}
-
-.task-description:hover {
-  box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.15);
-}
-
-.error-animation {
-  animation: pulse 2s infinite ease-in-out;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-}
-</style>

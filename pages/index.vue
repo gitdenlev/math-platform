@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { StepperItem } from "@nuxt/ui";
 import HumanifyPreviewVideo from "~/components/HumanifyPreviewVideo.vue";
-// Імпортуємо ваш компонент відеоплеєра
 
 const items = ref<StepperItem[]>([
   {
@@ -33,9 +32,9 @@ useHead({
   ],
   link: [
     {
-      rel: "icon", // використовуємо "icon" для favicon
+      rel: "icon",
       href: "/logo.svg",
-      type: "image/svg+xml", // важливо вказати тип для SVG
+      type: "image/svg+xml",
     },
   ],
 });
@@ -46,69 +45,21 @@ const features = [
     title: "Інтерактивні задачі",
     description:
       "Розв'язуйте математичні задачі з миттєвою перевіркою правильності рішення та підказками",
-    color: "bg-emerald-600",
   },
   {
     icon: "mdi:book-open-page-variant",
     title: "Докладний довідник",
     description:
       "Повний математичний довідник з формулами, теоремами та візуальними поясненнями",
-    color: "bg-emerald-600",
   },
   {
     icon: "mdi:flask-outline",
     title: "Експериментальна лабораторія",
     description:
       "Досліджуйте математичні концепції за допомогою інтерактивних моделей та симуляцій",
-    color: "bg-emerald-600",
   },
 ];
 
-// Курси за рівнями
-const courseLevels = [
-  {
-    level: "Початковий",
-    icon: "mdi:chart-timeline-variant",
-    color: "bg-emerald-500",
-    description:
-      "Ідеально підходить для тих, хто починає свій шлях у програмуванні та математиці",
-    courses: [
-      { title: "Основи алгоритмів", duration: "4 тижні", lessons: 12 },
-      { title: "Математична логіка", duration: "3 тижні", lessons: 9 },
-      {
-        title: "Лінійні рівняння в програмуванні",
-        duration: "2 тижні",
-        lessons: 8,
-      },
-    ],
-  },
-  {
-    level: "Середній",
-    icon: "mdi:function-variant",
-    color: "bg-emerald-600",
-    description:
-      "Для тих, хто має базові знання та прагне поглибити розуміння математики в програмуванні",
-    courses: [
-      { title: "Рекурсивні алгоритми", duration: "5 тижнів", lessons: 15 },
-      { title: "Структури даних", duration: "6 тижнів", lessons: 18 },
-      { title: "Геометричні алгоритми", duration: "4 тижні", lessons: 12 },
-    ],
-  },
-  {
-    level: "Просунутий",
-    icon: "mdi:graph",
-    color: "bg-teal-500",
-    description:
-      "Складні теми для досвідчених програмістів, які бажають освоїти вищу математику",
-    courses: [
-      { title: "Чисельні методи", duration: "7 тижнів", lessons: 21 },
-      { title: "Криптографічні алгоритми", duration: "8 тижнів", lessons: 24 },
-      { title: "Машинне навчання", duration: "10 тижнів", lessons: 30 },
-    ],
-  },
-];
-
-// Відгуки студентів
 const testimonials = [
   {
     name: "Марія Петренко",
@@ -136,77 +87,36 @@ const testimonials = [
   },
 ];
 
-// Статистика платформи
 const statistics = [
   {
     value: "100+",
     label: "Активних студентів",
     icon: "mdi:account-group",
-    color: "text-emerald-600",
   },
   {
     value: "250+",
     label: "Інтерактивних задач",
     icon: "mdi:code-braces",
-    color: "text-emerald-600",
   },
   {
     value: "50+",
     label: "Математичних тем",
     icon: "mdi:book-open-variant",
-    color: "text-emerald-600",
   },
   {
     value: "98%",
     label: "Задоволених студентів",
     icon: "mdi:thumb-up",
-    color: "text-emerald-600",
-  },
-];
-
-// Часті запитання
-const faqItems = [
-  {
-    label: "Що таке Humanify?",
-    content:
-      "Humanify — це інноваційна освітня платформа, яка допомагає вивчати математику через програмування. Наш підхід поєднує теоретичні математичні концепції з практичним програмуванням, щоб забезпечити глибше розуміння обох дисциплін.",
-  },
-  {
-    label: "Чи потрібні попередні знання з програмування?",
-    content:
-      "Для початкового рівня курсів попередні знання не обов'язкові. Ми пропонуємо курси для різних рівнів підготовки: від початківців до просунутих. Кожен курс поступово вводить необхідні концепції як з математики, так і з програмування.",
-  },
-  {
-    label: "Які мови програмування використовуються?",
-    content:
-      "На платформі використовуються Python, JavaScript та інші популярні мови програмування. Вибір мови залежить від теми курсу та рівня складності. Для початківців ми рекомендуємо курси на Python, оскільки ця мова має простий синтаксис і добре підходить для вивчення алгоритмів.",
-  },
-  {
-    label: "Як оцінюються виконані завдання?",
-    content:
-      "Наша система автоматично перевіряє правильність рішень задач, аналізуючи код не лише на коректність, але й на ефективність та стиль. Крім того, для деяких проектів передбачена експертна оцінка від викладачів, які надають персональний зворотний зв'язок.",
-  },
-  {
-    label: "Чи можна навчатися за індивідуальним графіком?",
-    content:
-      "Так, всі курси доступні для самостійного проходження у зручному для вас темпі. Ви маєте постійний доступ до матеріалів і можете повернутися до будь-якої теми для повторення. Рекомендовані терміни проходження курсів є орієнтовними.",
-  },
-  {
-    label: "Які сертифікати можна отримати?",
-    content:
-      "Після успішного завершення кожного курсу ви отримуєте цифровий сертифікат, який можна додати до свого резюме або профілю LinkedIn. Наші сертифікати визнаються багатьма IT-компаніями та освітніми установами.",
   },
 ];
 
 const isModalOpen = ref(false);
 const videoSrc = ref("/video.mp4");
 
-// Функція для відкриття модального вікна
 const openVideoModal = () => {
   isModalOpen.value = true;
 };
 
-// Скидаємо стан модального вікна при завантаженні сторінки
 onMounted(() => {
   isModalOpen.value = false;
 });
@@ -214,8 +124,8 @@ onMounted(() => {
 
 <template>
   <NuxtLayout name="default">
-    <div class="flex md:flex-row items-center justify-between">
-      <div class="flex-1 text-center md:text-left relative">
+    <div class="flex md:flex-row items-center justify-between text-left">
+      <div class="flex-1 text-left relative">
         <div
           class="inline-flex items-center gap-1 mb-4 px-3 py-1 text-sm font-medium bg-emerald-600 text-white rounded-full"
         >
@@ -224,7 +134,7 @@ onMounted(() => {
         </div>
 
         <h1
-          class="text-5xl md:text-6xl font-extrabold text-emerald-600 leading-tight"
+          class="text-4xl md:text-6xl font-extrabold text-emerald-600 leading-tight"
         >
           Програмуй математично
         </h1>
@@ -266,7 +176,7 @@ onMounted(() => {
     </UModal>
 
     <section class="py-20">
-      <div class="text-center mb-12">
+      <div class="text-left md:text-center mb-16">
         <h2 class="text-4xl font-bold text-emerald-600 mb-4">
           Наші можливості
         </h2>
@@ -283,13 +193,11 @@ onMounted(() => {
           class="bg-white text-white rounded-xl p-6 shadow-lg relative overflow-hidden hover:shadow-xl transition-shadow duration-300"
         >
           <div
-            class="absolute -right-8 -top-8 w-24 h-24 rounded-full opacity-10"
-            :class="feature.color"
+            class="absolute -right-8 -top-8 w-24 h-24 rounded-full opacity-10 bg-emerald-600"
           ></div>
 
           <div
-            class="w-14 h-14 rounded-xl flex items-center justify-center mb-4"
-            :class="feature.color"
+            class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-emerald-600"
           >
             <Icon :name="feature.icon" class="text-2xl" />
           </div>
@@ -303,9 +211,9 @@ onMounted(() => {
     </section>
 
     <section
-      class="py-20 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl"
+      class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl"
     >
-      <div class="text-center mb-16">
+      <div class="text-left md:text-center mb-16">
         <h2 class="text-4xl font-bold text-emerald-600 mb-4">Як це працює</h2>
         <p class="text-gray-600 mx-auto">
           Наша методика дозволяє вам крок за кроком освоїти математичні
@@ -350,7 +258,7 @@ onMounted(() => {
               </div>
             </div>
             <div class="text-center">
-              <h3 class="text-xl text-center font-bold text-emerald-600 mb-3">
+              <h3 class="text-xl font-bold text-emerald-600 mb-3">
                 {{ items[1].title }}
               </h3>
               <p class="text-gray-600">{{ items[1].description }}</p>
@@ -372,7 +280,7 @@ onMounted(() => {
               </div>
             </div>
             <div class="text-center">
-              <h3 class="text-xl font-bold text-emerald-700 mb-3">
+              <h3 class="text-xl font-bold text-emerald-600 mb-3">
                 {{ items[2].title }}
               </h3>
               <p class="text-gray-600">{{ items[2].description }}</p>
@@ -383,7 +291,7 @@ onMounted(() => {
     </section>
 
     <section class="py-20">
-      <div class="text-center mb-16">
+      <div class="text-left md:text-center mb-16">
         <h2 class="text-4xl font-bold mb-4">Наші досягнення</h2>
         <p class="mx-auto">
           Humanify у цифрах — результат нашої наполегливої роботи та вашої
@@ -391,14 +299,10 @@ onMounted(() => {
         </p>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-        <div
-          v-for="(stat, index) in statistics"
-          :key="index"
-          class="text-center"
-        >
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div v-for="(stat, index) in statistics" :key="index">
           <div class="flex justify-center mb-4">
-            <Icon :name="stat.icon" :class="`text-5xl ${stat.color}`" />
+            <Icon :name="stat.icon" class="text-5xl text-emerald-600" />
           </div>
           <h3 class="text-4xl font-bold mb-2 text-emerald-600">
             {{ stat.value }}
@@ -409,7 +313,7 @@ onMounted(() => {
     </section>
 
     <section class="py-20">
-      <div class="text-center mb-12">
+      <div class="text-left md:text-center mb-16">
         <h2 class="text-4xl font-bold mb-4">Відгуки</h2>
         <p class="text-gray-600 max-w-2xl mx-auto">
           Гляньте, що кажуть ті, хто вже навчається з нами та здобуває нові
@@ -466,7 +370,7 @@ onMounted(() => {
       </UCarousel>
     </section>
 
-    <section class="py-20 bg-emerald-600 rounded-3xl relative overflow-hidden">
+    <section class="py-20 bg-emerald-600 rounded-3xl relative overflow-hidden text-center">
       <div class="absolute top-0 right-0 opacity-10">
         <Icon name="mdi:function" class="text-9xl text-white" />
       </div>
@@ -474,8 +378,8 @@ onMounted(() => {
         <Icon name="mdi:code-braces" class="text-9xl text-white" />
       </div>
 
-      <div class="relative z-10 text-center w-full mx-auto">
-        <h2 class="text-4xl font-bold mb-6" style="color: white">
+      <div class="relative z-10 w-full mx-auto">
+        <h2 class="text-4xl font-bold mb-6 text-white">
           Готові розпочати свій шлях в математичне програмування?
         </h2>
         <p class="text-lg text-white mb-8">
@@ -484,20 +388,9 @@ onMounted(() => {
         </p>
 
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <UButton> Зареєструватися безкоштовно </UButton>
+          <UButton class="bg-white text-emerald-600"> Зареєструватися безкоштовно </UButton>
         </div>
       </div>
     </section>
   </NuxtLayout>
 </template>
-
-<style scoped>
-/* Додаткові стилі для анімацій та ефектів */
-.u-button {
-  transition: all 0.2s ease;
-}
-
-.u-button:hover {
-  transform: translateY(-2px);
-}
-</style>

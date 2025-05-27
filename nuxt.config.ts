@@ -10,7 +10,6 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
-
   modules: [
     "@nuxt/eslint",
     "@nuxt/fonts",
@@ -18,35 +17,63 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/ui",
     "@nuxtjs/color-mode",
+    "nuxt-vuefire",
   ],
-  ui: {
-    global: true, // Обов'язково
 
+  vuefire: {
+    config: {
+      apiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      appId: process.env.NUXT_PUBLIC_FIREBASE_APP_ID,
+      measurementId: process.env.NUXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    },
+    analytics: true,
+  },
+
+  app: {
+    head: {
+      title: "Humanify - Програмуй Математично",
+      link: [
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          href: "/logo.svg",
+        }
+      ]
+    },
+  },
+
+  runtimeConfig: {
+    public: {
+      firebaseApiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
+      firebaseAuthDomain: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      firebaseProjectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
+      firebaseStorageBucket: process.env.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      firebaseMessagingSenderId:
+        process.env.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      firebaseAppId: process.env.NUXT_PUBLIC_FIREBASE_APP_ID,
+      firebaseMeasurementId: process.env.NUXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    },
+  },
+
+  ui: {
+    global: true,
     components: {
       button: {
         default: {
-          // Якщо ви хочете, щоб UButton без color="" мав primary колір
-          // Або якщо ви хочете, щоб при color="primary" використовувався саме 600-й відтінок
-          color: "primary", // Використовувати primary колір, визначений в app.config.ts
-          variant: "solid", // Варіант solid
-          // Перевизначаємо класи, щоб завжди використовувати 600-й відтінок primary
-          // (який тепер буде emerald-600, завдяки app.config.ts)
+          color: "primary",
+          variant: "solid",
           class:
             "bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-primary-600",
         },
-        // Якщо ви хочете, щоб при color="emerald" використовувався 600-й відтінок,
-        // а не 500-й (дефолт Nuxt UI для названих кольорів)
         variants: {
           solid: {
-            // Перевизначення для конкретного кольору (наприклад, 'emerald')
-            // якщо ви хочете використовувати color="emerald"
             emerald:
               "bg-emerald-600 text-white hover:bg-emerald-700 focus-visible:outline-emerald-600",
           },
-          // Додайте інші варіанти, якщо вони потрібні для primary
-          // solid: {
-          //   primary: 'bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-primary-600'
-          // }
         },
       },
     },

@@ -2,7 +2,6 @@
   <div
     class="flex flex-col md:flex-row items-center justify-center min-h-screen bg-white text-gray-800 p-8 gap-12"
   >
-    <!-- Ліва частина (зображення / емодзі) -->
     <NuxtImg
       loading="lazy"
       src="/not-found-page-humanify.svg"
@@ -13,11 +12,10 @@
     <!-- Права частина (опис + кнопка) -->
     <div class="text-center md:text-left max-w-md">
       <h1 class="text-4xl md:text-5xl font-bold mb-4 text-emerald-600">
-        404 - Сторінку не знайдено
+        Error {{ error.statusCode }}
       </h1>
       <p class="text-xl mb-6 text-gray-700">
-        Ви впевнені, що така сторінка існує? Можливо, ви звернули не туди.
-        Спробуйте повернутись назад або перейти на головну.
+        {{ error.message || 'Сторінка, яку ви шукаєте, не існує або була видалена.' }}
       </p>
       <NuxtLink
         to="/"
