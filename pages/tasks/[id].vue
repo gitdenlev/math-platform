@@ -116,6 +116,9 @@ useHead(() => ({
 
 <template>
   <Header />
+  <div class="flex items-center justify-center rounded-xl fixed bottom-5 right-10 w-16 h-16 bg-gray-600/50 backdrop-blur-sm py-6 mb-8">
+    <NuxtImg src="/leo-ai-agent-humanify.jpg" width="100" />
+  </div>
   <div v-if="task" class="max-w-5xl mx-auto py-10 px-4">
     <!-- Навігаційні посилання з анімацією -->
     <div class="mb-6 flex items-center text-sm">

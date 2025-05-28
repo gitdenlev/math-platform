@@ -124,6 +124,7 @@ onMounted(() => {
 
 <template>
   <NuxtLayout name="default">
+  
     <div class="flex md:flex-row items-center justify-between text-left">
       <div class="flex-1 text-left relative">
         <div
