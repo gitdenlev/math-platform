@@ -1,9 +1,15 @@
 <template>
-  <body>
+  <div class="min-h-screen flex flex-col">
     <HumanifyHeader />
-    <main class="container p-6 mx-auto">
-      <slot />
-      <HumanifyFooter />
+
+    <main class="flex-1">
+      <div class="container p-6 mx-auto">
+        <slot />
+      </div>
     </main>
-  </body>
+
+    <div class="container p-6 mx-auto">
+      <HumanifyFooter />
+    </div>
+  </div>
 </template>

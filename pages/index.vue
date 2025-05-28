@@ -388,7 +388,7 @@ onMounted(() => {
         </p>
 
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <UButton class="bg-white text-emerald-600"> Зареєструватися безкоштовно </UButton>
+          <NuxtLink to="/login" class="bg-white text-emerald-600"> Зареєструватися безкоштовно </NuxtLink>
         </div>
       </div>
     </section>
