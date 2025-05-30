@@ -1,6 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <HumanifyHeader />
+    <ClientOnly>
+      <HumanifyHeader />
+    </ClientOnly>
 
     <main class="flex-1">
       <div class="container p-6 mx-auto">

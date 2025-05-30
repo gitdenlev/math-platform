@@ -140,18 +140,14 @@ const benefits = [
 
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <input
-                id="remember-me"
-                v-model="loginForm.rememberMe"
-                type="checkbox"
-                class="h-4 w-4 text-emerald-600 focus:ring-emerald-600 border-gray-300 rounded"
+              <UCheckbox
+                :ui="{
+                  root: 'text-red-600 focus:ring-emerald-600',
+                }"
+                icon="lucide:check"
+                default-value
+                label="Запамʼятати мене"
               />
-              <ULabel
-                for="remember-me"
-                class="ml-2 block text-sm text-gray-700"
-              >
-                Запам'ятати мене
-              </ULabel>
             </div>
 
             <NuxtLink
@@ -166,7 +162,7 @@ const benefits = [
             type="submit"
             :loading="isLoading"
             :disabled="isLoading"
-            class="w-full text-xl flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl font-medium transition-all duration-200 transform hover:scale-[1.02]"
+            class="w-full text-xl flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl font-medium transition-all duration-200 transform"
           >
             <template v-if="!isLoading">
               <Icon name="mdi:login" class="mr-2" />
@@ -192,10 +188,7 @@ const benefits = [
                   Увіти через Google
                 </UButton>
               </div>
-              <UModal
-               
-                close-icon="ri:close-circle-line"
-              >
+              <UModal close-icon="ri:close-circle-line">
                 <UButton
                   variant="outline"
                   class="bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-xl w-full flex items-center justify-center"
@@ -254,39 +247,3 @@ const benefits = [
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Додаткові стилі для анімацій */
-.transform {
-  transition: transform 0.2s ease;
-}
-
-/* Стилі для focus states */
-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); /* Світло-зелена тінь для фокусу */
-}
-
-/* Анімація для кнопок */
-button:hover {
-  transform: translateY(-1px);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-/* Стиль для чекбокса, щоб колір відповідав темі */
-input[type="checkbox"] {
-  accent-color: #059669; /* emerald-600 */
-}
-
-/* Для кращої видимості тексту на сірих кнопках (якщо UButton не встановлює його автоматично) */
-.bg-gray-600 {
-  color: white; /* Переконуємось, що текст білий */
-}
-.bg-gray-600 .icon {
-  /* Якщо іконки не білі за замовчуванням */
-  color: white;
-}
-</style>

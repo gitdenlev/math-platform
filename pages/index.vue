@@ -236,8 +236,8 @@ onMounted(() => {
                 <Icon :name="items[0].icon" class="text-2xl text-white" />
               </div>
             </div>
-            <div class="text-center">
-              <h3 class="text-xl font-bold text-emerald-600 mb-3">
+            <div>
+              <h3 class="text-lg font-bold text-emerald-600 mb-3">
                 {{ items[0].title }}
               </h3>
               <p class="text-gray-600">{{ items[0].description }}</p>
@@ -258,8 +258,8 @@ onMounted(() => {
                 <Icon :name="items[1].icon" class="text-2xl text-white" />
               </div>
             </div>
-            <div class="text-center">
-              <h3 class="text-xl font-bold text-emerald-600 mb-3">
+            <div>
+              <h3 class="text-lg font-bold text-emerald-600 mb-3">
                 {{ items[1].title }}
               </h3>
               <p class="text-gray-600">{{ items[1].description }}</p>
@@ -280,8 +280,8 @@ onMounted(() => {
                 <Icon :name="items[2].icon" class="text-2xl text-white" />
               </div>
             </div>
-            <div class="text-center">
-              <h3 class="text-xl font-bold text-emerald-600 mb-3">
+            <div>
+              <h3 class="text-lg font-bold text-emerald-600 mb-3">
                 {{ items[2].title }}
               </h3>
               <p class="text-gray-600">{{ items[2].description }}</p>
