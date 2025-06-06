@@ -7,7 +7,7 @@ const navLinks = [
   { label: "Задачі", to: "/tasks", icon: "mdi:lightbulb-on-outline" },
   { label: "Лабораторія", to: "/lab", icon: "mdi:flask-outline" },
   {
-    label: "HumyAI",
+    label: "AI",
     to: "/humy",
     icon: "streamline-flex:ai-scanner-robot-remix",
   },

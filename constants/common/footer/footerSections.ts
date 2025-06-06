@@ -3,9 +3,10 @@ export const allFooterSections = [
     title: "Платформа",
     links: [
       { title: "Головна", url: "/" },
-      { title: "Довідник", url: "/" },
+      { title: "Довідник", url: "/theory" },
       { title: "Лабораторія", url: "/lab" },
       { title: "Задачі", url: "/tasks" },
+      { title: "HumyAI", url: "/humy" },
     ],
   },
   {

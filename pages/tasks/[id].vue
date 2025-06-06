@@ -111,14 +111,25 @@ useHead(() => ({
         : "Задача не знайдена",
     },
   ],
+  script: [
+    {
+      src: "https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js",
+      type: "module",
+      async: true,
+    },
+  ],
 }));
 </script>
 
 <template>
   <Header />
-  <div class="flex items-center justify-center fixed bottom-5 right-10 w-12 h-12 rounded-full bg-emerald-600 shadow-lg z-50 cursor-pointer">
-    <Icon class="text-white" name="streamline-flex:ai-scanner-robot-remix" size="30" />
-  </div>
+  <iframe
+    src="https://interfaces.zapier.com/embed/chatbot/cmb8aa52k00e3gqobkd8755nz"
+    height="600px"
+    width="400px"
+    allow="clipboard-write *"
+    style="border: none"
+  ></iframe>
   <div v-if="task" class="max-w-5xl mx-auto py-10 px-4">
     <!-- Навігаційні посилання з анімацією -->
     <div class="mb-6 flex items-center text-sm">
@@ -209,7 +220,9 @@ useHead(() => ({
                 >{{ solutionText.length }} / {{ maxChars }}</span
               >
             </div>
-            <UButton class="rounded-full" disabled icon="ri:check-fill"> Перевірити </UButton>
+            <UButton class="rounded-full" disabled icon="ri:check-fill">
+              Перевірити
+            </UButton>
           </div>
         </div>
       </div>
