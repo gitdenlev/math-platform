@@ -58,6 +58,11 @@ const tasks = ref<Task[]>([
   },
 ]);
 
+const showChatBot = ref(false);
+const toggleChatBot = () => {
+  showChatBot.value = !showChatBot.value;
+};
+
 const route = useRoute();
 const taskId = computed(() => Number(route.params.id));
 
@@ -123,13 +128,21 @@ useHead(() => ({
 
 <template>
   <Header />
-  <iframe
-    src="https://interfaces.zapier.com/embed/chatbot/cmb8aa52k00e3gqobkd8755nz"
-    height="600px"
-    width="400px"
-    allow="clipboard-write *"
-    style="border: none"
-  ></iframe>
+  <div
+    @click="toggleChatBot"
+    class="cursor-pointer flex items-center justify-center fixed bottom-10 right-10 z-50 rounded-full w-10 h-10 bg-emerald-600 text-white p-2"
+  >
+    <Icon name="streamline-flex:ai-scanner-robot-remix" size="30" />
+    <iframe
+      src="https://interfaces.zapier.com/embed/chatbot/cmb8aa52k00e3gqobkd8755nz"
+      height="600px"
+      width="400px"
+      allow="clipboard-write *"
+      v-if="showChatBot"
+      class="fixed right-30 bottom-10 z-50 rounded-xl shadow-lg border border-gray-200"
+    ></iframe>
+  </div>
+
   <div v-if="task" class="max-w-5xl mx-auto py-10 px-4">
     <!-- Навігаційні посилання з анімацією -->
     <div class="mb-6 flex items-center text-sm">

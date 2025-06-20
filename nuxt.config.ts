@@ -41,13 +41,16 @@ export default defineNuxtConfig({
           rel: "icon",
           type: "image/x-icon",
           href: "/logo-humanify.svg",
-        }
-      ]
+        },
+      ],
     },
   },
 
   runtimeConfig: {
+    // GEMINI_API_KEY повинен бути тут, щоб він був доступний лише на сервері
+    geminiApiKey: process.env.GEMINI_API_KEY, // <--- Важливо: без NUXT_PUBLIC_
     public: {
+      // Firebase ключі тут, оскільки вони потрібні на клієнті для VueFire
       firebaseApiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
       firebaseAuthDomain: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
       firebaseProjectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID,

@@ -6,7 +6,7 @@ export const allFooterSections = [
       { title: "Довідник", url: "/theory" },
       { title: "Лабораторія", url: "/lab" },
       { title: "Задачі", url: "/tasks" },
-      { title: "HumyAI", url: "/humy" },
+      { title: "Асистент", url: "/humy" },
     ],
   },
   {

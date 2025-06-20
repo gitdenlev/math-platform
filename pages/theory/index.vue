@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useHead({
-  title: "Довідник - Humanify",
+  title: "Довідник",
   meta: [
     {
       name: "description",

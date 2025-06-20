@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { StepperItem } from "@nuxt/ui";
-import HumanifyPreviewVideo from "~/components/HumanifyPreviewVideo.vue";
 
 const items = ref<StepperItem[]>([
   {
@@ -110,16 +109,7 @@ const statistics = [
   },
 ];
 
-const isModalOpen = ref(false);
-const videoSrc = ref("/video.mp4");
 
-const openVideoModal = () => {
-  isModalOpen.value = true;
-};
-
-onMounted(() => {
-  isModalOpen.value = false;
-});
 </script>
 
 <template>
@@ -146,11 +136,8 @@ onMounted(() => {
         </p>
 
         <div class="mt-8 flex justify-center md:justify-start">
-          <UButton
-            icon="mdi:play-circle-outline"
-            label="Подивитися відео"
-            @click="openVideoModal"
-          />
+          
+          <NuxtLink class="gap-2 p-2 rounded-md cursor-pointer flex items-center justify-center bg-emerald-600 text-white" to="/login"><Icon name="mdi:register" />Зареєструватися</NuxtLink>
         </div>
       </div>
 
@@ -166,15 +153,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <UModal :ui="{ width: 'max-w-3xl' }">
-      <HumanifyPreviewVideo
-        :src="videoSrc"
-        :autoplay="true"
-        :loop="false"
-        :is-visible="isModalOpen"
-        @close="isModalOpen = false"
-      />
-    </UModal>
+ 
 
     <section class="py-20">
       <div class="text-left md:text-center mb-16">
