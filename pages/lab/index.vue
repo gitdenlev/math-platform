@@ -177,7 +177,7 @@ const runCode = async () => {
 
   try {
     const encodedExpression = encodeURIComponent(code.value.trim());
-    const apiUrl = `http://api.mathjs.org/v4/?expr=${encodedExpression}`;
+    const apiUrl = `https://api.mathjs.org/v4/?expr=${encodedExpression}`;
     const response = await fetch(apiUrl);
     const textResult = await response.text();
     const endTime = performance.now();
