@@ -4,7 +4,7 @@
       <div class="mb-6">
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div
-            class="bg-emerald-600 px-6 py-4 flex items-center justify-between"
+            class="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-4 flex items-center justify-between"
           >
             <div class="flex items-center gap-3">
               <div class="flex gap-2">

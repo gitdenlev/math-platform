@@ -18,7 +18,7 @@ const isActive = (path: string) => route.path === path;
 
 <template>
   <header
-    class="sticky top-0 z-50 bg-emerald-600 backdrop-blur-lg shadow-lg border-b border-emerald-300/30"
+    class="sticky top-0 z-50 bg-gradient-to-r from-emerald-500 to-emerald-600 backdrop-blur-lg shadow-lg border-b border-emerald-300/30"
   >
     <nav class="w-full flex items-center justify-between px-4 sm:px-6 py-4">
       <!-- Логотип -->

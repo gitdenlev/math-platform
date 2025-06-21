@@ -6,11 +6,26 @@ interface ChatMessage {
   parts: { text: string }[];
 }
 
+// Тип для тіла запиту
+interface RequestBody {
+  message: string;
+  history?: ChatMessage[];
+}
+
 export default defineEventHandler(async (event) => {
+  // Перевіряємо метод запиту
+  if (event.node.req.method !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Метод не дозволений. Використовуйте POST.",
+    });
+  }
+
   const config = useRuntimeConfig();
   const apiKey = config.geminiApiKey;
 
   if (!apiKey) {
+    console.error("GEMINI_API_KEY не знайдено в конфігурації");
     throw createError({
       statusCode: 500,
       statusMessage: "GEMINI_API_KEY не встановлено в змінних оточення.",
@@ -18,12 +33,30 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const { message, history = [] } = await readBody(event);
+    const body: RequestBody = await readBody(event);
+    const { message, history = [] } = body;
 
-    if (!message || !message.trim()) {
+    // Валідація вхідних даних
+    if (!message || typeof message !== "string" || !message.trim()) {
       throw createError({
         statusCode: 400,
         statusMessage: "Повідомлення не може бути порожнім.",
+      });
+    }
+
+    // Обмеження довжини повідомлення
+    if (message.length > 4000) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Повідомлення занадто довге. Максимум 4000 символів.",
+      });
+    }
+
+    // Валідація історії
+    if (history && (!Array.isArray(history) || history.length > 50)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Некоректна історія чату або занадто довга.",
       });
     }
 
@@ -87,7 +120,7 @@ export default defineEventHandler(async (event) => {
       model: "gemini-1.5-flash",
       systemInstruction: systemInstruction,
       generationConfig: {
-        temperature: 0.7, // Трохи креативності, але не надто
+        temperature: 0.7,
         topP: 0.8,
         topK: 40,
         maxOutputTokens: 1000,
@@ -99,28 +132,72 @@ export default defineEventHandler(async (event) => {
       history: history as ChatMessage[],
     });
 
-    // Відправляємо повідомлення
-    const result = await chat.sendMessage(message);
+    // Відправляємо повідомлення з timeout
+    const result = (await Promise.race([
+      chat.sendMessage(message.trim()),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Timeout")), 30000)
+      ),
+    ])) as any;
+
     const response = await result.response;
     const text = response.text();
 
+    // Перевіряємо, чи отримали відповідь
+    if (!text || text.trim() === "") {
+      throw new Error("Порожня відповідь від AI");
+    }
+
     return {
+      success: true,
       response: text,
-      // Можна повернути оновлену історію для збереження контексту
+      // Обмежуємо розмір історії (останні 20 повідомлень)
       newHistory: [
-        ...history,
-        { role: "user", parts: [{ text: message }] },
-        { role: "model", parts: [{ text: text }] },
+        ...history.slice(-18), // Залишаємо останні 18 + 2 нові = 20
+        { role: "user" as const, parts: [{ text: message.trim() }] },
+        { role: "model" as const, parts: [{ text: text }] },
       ],
     };
   } catch (error) {
     console.error("Помилка при зверненні до Gemini API:", error);
 
+    // Детальніше логування для діагностики
+    if (error instanceof Error) {
+      console.error("Деталі помилки:", {
+        name: error.name,
+        message: error.message,
+        stack: error.stack?.slice(0, 500),
+      });
+    }
+
+    // Повертаємо різні помилки залежно від типу
+    if (error instanceof Error) {
+      if (error.message.includes("API_KEY")) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: "Помилка авторизації API.",
+        });
+      }
+
+      if (error.message.includes("quota") || error.message.includes("limit")) {
+        throw createError({
+          statusCode: 429,
+          statusMessage: "Перевищено ліміт запитів. Спробуйте пізніше.",
+        });
+      }
+
+      if (error.message === "Timeout") {
+        throw createError({
+          statusCode: 408,
+          statusMessage:
+            "Час очікування відповіді вичерпано. Спробуйте ще раз.",
+        });
+      }
+    }
+
     throw createError({
       statusCode: 500,
-      statusMessage: `Помилка при обробці запиту до AI: ${
-        error instanceof Error ? error.message : "Невідома помилка"
-      }`,
+      statusMessage: "Помилка при обробці запиту до AI. Спробуйте пізніше.",
     });
   }
 });
