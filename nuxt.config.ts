@@ -20,6 +20,12 @@ export default defineNuxtConfig({
     "nuxt-vuefire",
   ],
 
+  icon: {
+    serverBundle: {
+      collections: ["ph", "streamline-flex", "svg-spinners", "pajamas"],
+    },
+  },
+
   vuefire: {
     config: {
       apiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
