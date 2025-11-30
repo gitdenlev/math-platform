@@ -66,7 +66,7 @@
 import { ref, computed } from "vue";
 
 useHead({
-  title: "MathLab - Humanify",
+  title: "Humanify",
   meta: [
     {
       name: "description",

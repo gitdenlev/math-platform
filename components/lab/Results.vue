@@ -72,15 +72,15 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex items-center justify-center gap-2">
+            <div class="flex items-center justify-center gap-1">
               <button
                 v-if="!result.error"
                 @click="copyResult(result)"
                 class="group relative flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all duration-300 border"
                 :class="[
                   copied === result.id
-                    ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
-                    : 'bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-gray-200 hover:border-gray-300',
+              
+                    ? 'bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-gray-200 hover:border-gray-300',
                 ]"
               >
                 <div class="relative flex items-center justify-center">

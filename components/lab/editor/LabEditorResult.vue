@@ -4,7 +4,8 @@
       <!-- Result Display -->
       <div
         v-if="result"
-        class="w-full animate-slide-up bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 sm:p-6"
+        :key="resultKey"
+        class="w-full animate-slide-up bg-white dark:bg-gray-900 rounded-2xl shadow-md p-4 sm:p-6"
       >
         <div class="flex flex-col gap-4">
           <!-- Main Result -->
@@ -28,12 +29,15 @@
           <!-- Actions -->
           <div
             v-if="!result.error"
-            class="flex items-center gap-3 sm:gap-4 pt-2 flex-wrap"
+            class="flex items-center sm:gap-4 pt-2 flex-wrap"
           >
             <button
               @click="handleCopy"
-              class="text-gray-400 hover:text-emerald-600 transition-colors flex items-center gap-1"
-              :class="{ 'text-emerald-600': isCopied }"
+              class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
+              :class="{
+                'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20':
+                  isCopied,
+              }"
               title="Copy"
             >
               <Icon
@@ -45,8 +49,11 @@
 
             <button
               @click="toggleExplanation"
-              class="text-gray-400 hover:text-emerald-600 transition-colors"
-              :class="{ 'text-emerald-600': showExplanation }"
+              class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
+              :class="{
+                'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20':
+                  showExplanation,
+              }"
               title="Explain logic"
             >
               <Icon name="streamline-flex:ai-scanner-robot-remix" size="18" />
@@ -70,7 +77,11 @@
               </div>
 
               <!-- Content -->
-              <div v-else-if="explanation" class="prose prose-sm max-w-none">
+              <div
+                v-else-if="explanation"
+                :key="explanationKey"
+                class="prose prose-sm max-w-none"
+              >
                 <div
                   class="flex items-center gap-2 mb-4 text-emerald-700 font-medium text-sm"
                 >
@@ -128,6 +139,23 @@ const emit = defineEmits(["copy", "ask-humy", "clear-explanation"]);
 
 const showExplanation = ref(false);
 const isCopied = ref(false);
+const resultKey = ref(0);
+const explanationKey = ref(0);
+
+watch(
+  () => props.result,
+  () => {
+    resultKey.value++;
+  },
+  { deep: true }
+);
+
+watch(
+  () => props.explanation,
+  () => {
+    explanationKey.value++;
+  }
+);
 
 const handleCopy = () => {
   emit("copy", props.result);

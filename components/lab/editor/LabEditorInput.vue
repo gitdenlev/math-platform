@@ -9,17 +9,57 @@
           'border-emerald-500 ring-4 ring-emerald-500/10': isRunning,
         }"
       >
+        <!-- Suggestions Dropdown -->
+        <div
+          v-if="suggestions.length > 0"
+          class="absolute bottom-full left-0 w-full mb-4 bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden z-30 animate-slide-up"
+        >
+          <div
+            class="p-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center"
+          >
+            <span
+              class="text-xs font-semibold text-gray-500 tracking-wider flex items-center gap-2"
+            >
+              <Icon name="ph:sparkle-fill" class="text-emerald-500" />
+              Suggestions
+            </span>
+            <span
+              v-if="isSuggesting"
+              class="text-xs text-emerald-500 animate-pulse"
+              >Thinking...</span
+            >
+          </div>
+          <div class="max-h-60 overflow-y-auto custom-scrollbar p-1">
+            <button
+              v-for="(suggestion, index) in suggestions"
+              :key="index"
+              @click="selectSuggestion(suggestion)"
+              class="w-full text-left px-4 py-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-200 flex items-center justify-between group rounded-lg"
+              :class="{
+                'bg-emerald-50 dark:bg-emerald-900/20':
+                  index === suggestionIndex,
+              }"
+            >
+              <span
+                class="text-sm font-medium text-gray-700 dark:text-gray-200 font-mono group-hover:text-emerald-700 dark:group-hover:text-emerald-400"
+              >
+                {{ suggestion }}
+              </span>
+              <span
+                class="text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                Tab to select
+              </span>
+            </button>
+          </div>
+        </div>
+
         <!-- Input Field -->
         <input
           ref="inputRef"
           :value="modelValue"
-          @input="
-            $emit(
-              'update:modelValue',
-              ($event.target as HTMLInputElement).value
-            )
-          "
-          @keydown.enter.prevent="handleRun"
+          @input="handleInput"
+          @keydown="handleKeydown"
           type="text"
           class="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 text-sm sm:text-base focus:outline-none font-sans h-10 min-w-0"
           spellcheck="false"
@@ -32,7 +72,7 @@
           <div class="relative">
             <button
               @click="toggleDropdown('units')"
-              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors"
+              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
               title="Units Converter"
             >
               <Icon name="ph:ruler-bold" size="18" />
@@ -42,8 +82,11 @@
               v-if="activeDropdown === 'units'"
               class="absolute bottom-full right-0 mb-5 w-[90vw] sm:w-64 max-w-xs bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 animate-fade-in origin-bottom-right"
             >
-              <div class="p-2 bg-gray-50 border-b border-gray-100">
-                <span class="text-xs font-semibold text-gray-500 tracking-wider"
+              <div
+                class="p-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
+              >
+                <span
+                  class="text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wider"
                   >Units Converter</span
                 >
               </div>
@@ -63,7 +106,7 @@
                     v-for="item in category.items"
                     :key="item.name"
                     @click="insertText(item.value)"
-                    class="w-full text-left px-3 py-1.5 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 rounded-lg transition-colors flex items-center justify-between group"
+                    class="w-full text-left px-3 py-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 hover:text-emerald-700 dark:hover:text-emerald-400 rounded-lg transition-colors flex items-center justify-between group"
                   >
                     <span class="text-sm">{{ item.name }}</span>
                     <Icon
@@ -86,7 +129,7 @@
           <div class="relative">
             <button
               @click="toggleDropdown('constants')"
-              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors"
+              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
               title="Constants"
             >
               <Icon name="ph:pi-bold" size="18" />
@@ -94,11 +137,13 @@
 
             <div
               v-if="activeDropdown === 'constants'"
-              class="absolute bottom-full right-0 mb-5 w-[90vw] sm:w-64 max-w-xs bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 animate-fade-in origin-bottom-right"
+              class="absolute bottom-full right-0 mb-5 w-[90vw] sm:w-64 max-w-xs bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 animate-fade-in origin-bottom-right"
             >
-              <div class="p-2 bg-gray-50 border-b border-gray-100">
+              <div
+                class="p-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
+              >
                 <span
-                  class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                  class="text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wider"
                   >Constants</span
                 >
               </div>
@@ -107,20 +152,20 @@
                   v-for="constant in constants"
                   :key="constant.name"
                   @click="insertText(constant.value)"
-                  class="w-full text-left px-4 py-2.5 hover:bg-emerald-50 transition-colors flex items-center justify-between group"
+                  class="w-full text-left px-4 py-2.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors flex items-center justify-between group"
                 >
                   <div class="flex flex-col">
                     <span
-                      class="text-sm font-medium text-gray-700 group-hover:text-emerald-700"
+                      class="text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400"
                       >{{ constant.name }}</span
                     >
                     <span
-                      class="text-xs font-mono text-gray-400 group-hover:text-emerald-600"
+                      class="text-xs font-mono text-gray-400 dark:text-gray-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400"
                       >{{ constant.value }}</span
                     >
                   </div>
                   <span
-                    class="text-lg font-serif text-gray-300 group-hover:text-emerald-400"
+                    class="text-lg font-serif text-gray-300 dark:text-gray-600 group-hover:text-emerald-400"
                     >{{ constant.symbol }}</span
                   >
                 </button>
@@ -138,7 +183,7 @@
           <div class="relative">
             <button
               @click="toggleDropdown('functions')"
-              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors"
+              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
               title="Functions"
             >
               <Icon name="ph:function-bold" size="18" />
@@ -148,9 +193,11 @@
               v-if="activeDropdown === 'functions'"
               class="absolute bottom-full right-0 mb-5 w-[90vw] sm:w-64 max-w-xs bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 animate-fade-in origin-bottom-right"
             >
-              <div class="p-2 bg-gray-50 border-b border-gray-100">
+              <div
+                class="p-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
+              >
                 <span
-                  class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                  class="text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wider"
                   >Functions</span
                 >
               </div>
@@ -171,7 +218,7 @@
                       v-for="item in category.items"
                       :key="item.name"
                       @click="insertText(item.value)"
-                      class="text-left px-3 py-1.5 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 rounded-lg transition-colors text-sm"
+                      class="text-left px-3 py-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 hover:text-emerald-700 dark:hover:text-emerald-400 rounded-lg transition-colors text-sm"
                     >
                       {{ item.name }}
                     </button>
@@ -191,7 +238,7 @@
           <div class="relative">
             <button
               @click="toggleDropdown('formulas')"
-              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors"
+              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
               title="Insert Formula"
             >
               <Icon name="pajamas:formula" size="18" />
@@ -202,9 +249,11 @@
               v-if="activeDropdown === 'formulas'"
               class="absolute bottom-full right-0 mb-5 w-[90vw] sm:w-64 max-w-xs bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 animate-fade-in origin-bottom-right"
             >
-              <div class="p-2 bg-gray-50 border-b border-gray-100">
+              <div
+                class="p-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
+              >
                 <span
-                  class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                  class="text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wider"
                   >Formulas</span
                 >
               </div>
@@ -213,14 +262,14 @@
                   v-for="formula in formulas"
                   :key="formula.name"
                   @click="insertText(formula.value)"
-                  class="w-full text-left px-4 py-2.5 hover:bg-emerald-50 transition-colors flex flex-col gap-1 group"
+                  class="w-full text-left px-4 py-2.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors flex flex-col gap-1 group"
                 >
                   <span
-                    class="text-sm font-medium text-gray-700 group-hover:text-emerald-700"
+                    class="text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400"
                     >{{ formula.name }}</span
                   >
                   <span
-                    class="text-xs font-mono text-gray-400 group-hover:text-emerald-600"
+                    class="text-xs font-mono text-gray-400 dark:text-gray-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400"
                     >{{ formula.value }}</span
                   >
                 </button>
@@ -239,7 +288,7 @@
           <div class="relative">
             <button
               @click="toggleDropdown('settings')"
-              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors"
+              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
               title="Settings"
             >
               <Icon name="ph:sliders-horizontal-bold" size="18" />
@@ -249,10 +298,38 @@
               v-if="activeDropdown === 'settings'"
               class="absolute bottom-full right-0 mb-5 w-[90vw] sm:w-64 max-w-xs bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 animate-fade-in origin-bottom-right"
             >
+              <!-- Suggestion Mode -->
+              <div class="p-3 border-b border-gray-100 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                  <span
+                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wider"
+                    >Suggestion Mode</span
+                  >
+                  <button
+                    @click="isSuggestionsEnabled = !isSuggestionsEnabled"
+                    class="relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-offset-2 cursor-pointer"
+                    :class="
+                      isSuggestionsEnabled
+                        ? 'bg-emerald-500'
+                        : 'bg-gray-200 dark:bg-gray-700'
+                    "
+                  >
+                    <span
+                      class="inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform"
+                      :class="
+                        isSuggestionsEnabled
+                          ? 'translate-x-4.5'
+                          : 'translate-x-1'
+                      "
+                    />
+                  </button>
+                </div>
+              </div>
+
               <!-- Number Format -->
-              <div class="p-3 border-b border-gray-100">
+              <div class="p-3 border-b border-gray-100 dark:border-gray-700">
                 <span
-                  class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-2"
+                  class="text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wider block mb-2"
                   >Number Format</span
                 >
                 <div class="grid grid-cols-2 gap-1">
@@ -264,7 +341,7 @@
                     :class="
                       selectedFormat === option.value
                         ? 'bg-emerald-100 text-emerald-700'
-                        : 'hover:bg-gray-50 text-gray-600'
+                        : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
                     "
                   >
                     {{ option.label }}
@@ -275,7 +352,7 @@
               <!-- Precision -->
               <div class="p-3">
                 <span
-                  class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-2"
+                  class="text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wider block mb-2"
                   >Precision</span
                 >
                 <div class="grid grid-cols-2 gap-1">
@@ -287,7 +364,7 @@
                     :class="
                       selectedPrecision === option.value
                         ? 'bg-emerald-100 text-emerald-700'
-                        : 'hover:bg-gray-50 text-gray-600'
+                        : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
                     "
                   >
                     {{ option.label }}
@@ -350,7 +427,93 @@ const emit = defineEmits(["update:modelValue", "run"]);
 const inputRef = ref<HTMLInputElement | null>(null);
 const activeDropdown = ref<string | null>(null);
 const selectedFormat = ref("decimal");
-const selectedPrecision = ref("full");
+const selectedPrecision = ref<string | number>("full");
+const isSuggestionsEnabled = ref(true);
+
+// Suggestions State
+const suggestions = ref<string[]>([]);
+const isSuggesting = ref(false);
+const suggestionIndex = ref(0);
+let debounceTimer: NodeJS.Timeout;
+
+const handleInput = (e: Event) => {
+  const val = (e.target as HTMLInputElement).value;
+  emit("update:modelValue", val);
+
+  // Reset suggestions if input is empty
+  if (!val.trim()) {
+    suggestions.value = [];
+    return;
+  }
+
+  // Debounce API call
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(async () => {
+    // Don't fetch if input is very short (unless it's a known function start)
+    if (val.trim().length < 2 || !isSuggestionsEnabled.value) return;
+
+    isSuggesting.value = true;
+    try {
+      const { suggestions: newSuggestions } = await $fetch("/api/suggest", {
+        method: "POST",
+        body: { input: val },
+      });
+      suggestions.value = newSuggestions || [];
+      suggestionIndex.value = 0;
+    } catch (error) {
+      console.error("Failed to fetch suggestions:", error);
+    } finally {
+      isSuggesting.value = false;
+    }
+  }, 400);
+};
+
+const selectSuggestion = (suggestion: string) => {
+  emit("update:modelValue", suggestion);
+  suggestions.value = [];
+  if (inputRef.value) {
+    inputRef.value.focus();
+  }
+};
+
+const handleKeydown = (e: KeyboardEvent) => {
+  // Navigation for suggestions
+  if (suggestions.value.length > 0) {
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      suggestionIndex.value =
+        (suggestionIndex.value - 1 + suggestions.value.length) %
+        suggestions.value.length;
+      return;
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      suggestionIndex.value =
+        (suggestionIndex.value + 1) % suggestions.value.length;
+      return;
+    }
+    if (e.key === "Tab") {
+      e.preventDefault();
+      selectSuggestion(suggestions.value[suggestionIndex.value]);
+      return;
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      selectSuggestion(suggestions.value[suggestionIndex.value]);
+      return;
+    }
+    if (e.key === "Escape") {
+      suggestions.value = [];
+      return;
+    }
+  }
+
+  // Default Enter behavior (Run)
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    handleRun();
+  }
+};
 
 const toggleDropdown = (name: string) => {
   if (activeDropdown.value === name) {
@@ -370,6 +533,7 @@ const insertText = (text: string) => {
 
 const handleRun = () => {
   if (props.isRunning || !props.modelValue.trim()) return;
+  suggestions.value = []; // Clear suggestions on run
   emit("run", props.modelValue);
 };
 
@@ -394,7 +558,7 @@ input::placeholder {
   color: #9ca3af;
 }
 
-@keyframes fade-in {
+@keyframes slide-up {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -405,8 +569,8 @@ input::placeholder {
   }
 }
 
-.animate-fade-in {
-  animation: fade-in 0.2s ease-out;
+.animate-slide-up {
+  animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Custom Scrollbar */

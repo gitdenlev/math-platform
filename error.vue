@@ -61,14 +61,6 @@
           <Icon name="ph:house-bold" size="20" />
           <span>Go to Homepage</span>
         </NuxtLink>
-
-        <button
-          @click="handleBack"
-          class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-500 rounded-xl transition-all duration-200 hover:shadow-lg font-medium"
-        >
-          <Icon name="ph:arrow-left-bold" size="20" />
-          <span>Go Back</span>
-        </button>
       </div>
     </div>
   </div>
@@ -83,14 +75,6 @@ const colorMode = useColorMode();
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
-};
-
-const handleBack = () => {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    navigateTo("/");
-  }
 };
 
 const getErrorTitle = (code: number) => {

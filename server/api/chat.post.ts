@@ -1,5 +1,5 @@
-import { MATH_TEACHER_PROMPT } from "../constants/prompts";
-import { getGeminiModel } from "../utils/ai";
+import { MATH_TEACHER_PROMPT } from "~/server/constants/prompts";
+import { getGeminiModel } from "~/server/utils/ai";
 
 interface ChatMessage {
   role: "user" | "model";
