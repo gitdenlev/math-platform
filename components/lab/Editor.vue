@@ -1,9 +1,10 @@
 <template>
   <div
-    class="flex flex-col text-gray-900 dark:text-gray-100 font-sans selection:bg-emerald-400 text-emerald-900"
+    class="flex flex-col text-gray-900 dark:text-gray-100 font-sans selection:bg-emerald-400 text-emerald-900 h-full"
   >
     <!-- Main Content Area (Results) -->
     <LabEditorResult
+      class="flex-1 overflow-y-auto"
       ref="resultRef"
       :result="result"
       :explanation="explanation"
@@ -15,6 +16,7 @@
 
     <!-- Input Area (Footer) -->
     <LabEditorInput
+      class="shrink-0 z-20"
       ref="inputRef"
       v-model="code"
       :is-running="isRunning"

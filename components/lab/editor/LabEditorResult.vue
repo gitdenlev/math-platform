@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col items-center p-3 sm:p-6">
-    <div class="w-full max-w-3xl flex flex-col gap-4">
+  <div class="flex flex-col items-center p-3 sm:p-6 min-h-full pb-28 sm:pb-6">
+    <div class="w-full max-w-3xl flex flex-col gap-4 mt-auto sm:mt-0">
       <!-- Result Display -->
       <div
         v-if="result"
@@ -11,7 +11,7 @@
           <!-- Main Result -->
           <div
             v-if="!result.error"
-            class="text-2xl sm:text-3xl font-mono font-medium leading-relaxed text-gray-900 dark:text-gray-100 break-all"
+            class="text-xl sm:text-3xl font-mono font-medium leading-relaxed text-gray-900 dark:text-gray-100 break-all"
           >
             {{ result.result }}
           </div>
@@ -33,7 +33,7 @@
           >
             <button
               @click="handleCopy"
-              class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
+              class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
               :class="{
                 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20':
                   isCopied,
@@ -49,9 +49,9 @@
 
             <button
               @click="toggleExplanation"
-              class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
+              class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
               :class="{
-                'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20':
+                'light:text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 dark:text-emerald-600':
                   showExplanation,
               }"
               title="Explain logic"
@@ -88,7 +88,7 @@
                   <span class="gradient-text">Explanation</span>
                 </div>
                 <div
-                  class="text-gray-700 dark:text-white leading-relaxed text-[15px]"
+                  class="text-gray-700 dark:text-white leading-relaxed text-sm sm:text-[15px]"
                   v-html="formattedExplanation"
                 ></div>
               </div>

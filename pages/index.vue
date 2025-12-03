@@ -1,9 +1,9 @@
 <template>
   <div
-    class="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-gray-950 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f2937_1px,transparent_1px),linear-gradient(to_bottom,#1f2937_1px,transparent_1px)] bg-[size:20px_20px]"
+    class="min-h-screen flex flex-col sm:items-center sm:justify-center bg-white dark:bg-gray-950 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f2937_1px,transparent_1px),linear-gradient(to_bottom,#1f2937_1px,transparent_1px)] bg-[size:20px_20px]"
   >
     <div
-      class="w-full mx-auto px-3 sm:px-6 py-8 sm:py-12 flex flex-col relative"
+      class="w-full h-full sm:h-auto flex-1 sm:flex-none mx-auto px-3 sm:px-6 py-4 sm:py-12 flex flex-col relative"
     >
       <!-- Header Actions -->
       <div
@@ -46,6 +46,7 @@
       </div>
 
       <LabEditor
+        class="flex-1 flex flex-col"
         @run="runCode"
         :is-running="isRunning"
         :result="latestResult"
@@ -53,7 +54,6 @@
         :is-explanation-loading="humyLoading"
         @copy="copyResult"
         @ask-humy="askHumy"
-        @download="downloadResult"
         @clear-explanation="humyExplanation = ''"
       />
 
@@ -142,21 +142,7 @@ const copyResult = async (result) => {
   }
 };
 
-const downloadResult = (result) => {
-  if (!result || result.error) return;
-  const blob = new Blob(
-    [`Expression: ${result.expression}\nResult: ${result.result}`],
-    { type: "text/plain" }
-  );
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "mathlab-result.txt";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-};
+
 
 const askHumy = async (resultItem) => {
   humyExpression.value = resultItem.expression;

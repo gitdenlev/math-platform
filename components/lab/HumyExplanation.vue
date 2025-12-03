@@ -10,12 +10,6 @@
       <div
         class="px-5 py-3.5 flex items-center justify-between border-b border-gray-200/50 dark:border-gray-800"
       >
-        <h2
-          class="text-[15px] font-medium text-[#1d1d1f] dark:text-gray-100"
-          style="letter-spacing: -0.02em"
-        >
-          Humy AI
-        </h2>
         <button
           @click="$emit('close')"
           class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded transition-colors"
@@ -32,11 +26,8 @@
           class="flex flex-col items-center justify-center py-12"
         >
           <div
-            class="w-8 h-8 border-2 border-gray-300 dark:border-gray-700 border-t-gray-600 dark:border-t-gray-400 rounded-full animate-spin mb-2"
+            class="w-8 h-8 border-2 border-gray-300 dark:border-gray-700 border-t-gray-600 dark:border-t-gray-400 rounded-full animate-spin mb-4"
           ></div>
-          <p class="text-[13px] text-gray-500 dark:text-gray-400">
-            {{ currentMessage }}
-          </p>
         </div>
 
         <!-- AI Response -->
@@ -72,44 +63,6 @@ const props = defineProps({
 });
 
 defineEmits(["close"]);
-
-/* -------------------------
-   LOADING ANIMATION
-------------------------- */
-const loadingMessages = [
-  "Analyzing your request...",
-  "Processing mathematical formulas...",
-  "Generating step-by-step explanation...",
-  "Formatting the response...",
-  "Almost there...",
-];
-
-const currentMessage = ref(loadingMessages[0]);
-let messageInterval: NodeJS.Timeout | null = null;
-
-watch(
-  () => props.isLoading,
-  (newValue) => {
-    if (newValue) {
-      let index = 0;
-      currentMessage.value = loadingMessages[0];
-      messageInterval = setInterval(() => {
-        index = (index + 1) % loadingMessages.length;
-        currentMessage.value = loadingMessages[index];
-      }, 2000);
-    } else {
-      if (messageInterval) {
-        clearInterval(messageInterval);
-        messageInterval = null;
-      }
-    }
-  },
-  { immediate: true }
-);
-
-onUnmounted(() => {
-  if (messageInterval) clearInterval(messageInterval);
-});
 </script>
 
 <style scoped>
@@ -151,5 +104,15 @@ onUnmounted(() => {
 
 :global(.dark) .response-content {
   color: #ffffff;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
