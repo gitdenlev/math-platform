@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="min-h-screen flex flex-col sm:items-center sm:justify-center bg-white dark:bg-gray-950 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f2937_1px,transparent_1px),linear-gradient(to_bottom,#1f2937_1px,transparent_1px)] bg-[size:20px_20px]"
-  >
+  <CommonGridBackground inner-class="sm:items-center sm:justify-center">
     <div
       class="w-full h-full sm:h-auto flex-1 sm:flex-none mx-auto px-3 sm:px-6 py-4 sm:py-12 flex flex-col relative"
     >
@@ -9,6 +7,7 @@
       <div
         class="fixed top-0 right-3 sm:right-6 mt-3 sm:mt-4 z-30 flex items-center gap-2"
       >
+
         <button
           @click="toggleTheme"
           class="flex items-center justify-center w-10 h-10 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-500 transition-all text-gray-600 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 group cursor-pointer shadow-lg"
@@ -45,6 +44,27 @@
         </button>
       </div>
 
+      <!-- Greeting / User Profile -->
+      <div class="fixed bottom-6 left-6 z-30">
+        <button
+          class="group relative px-4 py-2 rounded-xl transition-all duration-300 hover:bg-white dark:hover:bg-gray-800 hover:shadow-lg border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800"
+        >
+          <span
+            ref="greetingTarget"
+            class="text-lg font-medium text-gray-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors bg-clip-text"
+          ></span>
+        </button>
+      </div>
+
+      <!-- Humanify Animated Title -->
+      <div class="text-center sm:mt-0 px-4 select-none">
+        <h1
+          class="text-4xl sm:text-6xl font-semibold tracking-tighter bg-gradient-to-br from-emerald-800 to-emerald-600 dark:from-emerald-600 dark:to-emerald-400 bg-clip-text text-transparent font-['Outfit'] pb-4"
+        >
+          <span ref="typeItTarget"></span>
+        </h1>
+      </div>
+
       <LabEditor
         class="flex-1 flex flex-col"
         @run="runCode"
@@ -56,14 +76,14 @@
         @ask-humy="askHumy"
         @clear-explanation="humyExplanation = ''"
       />
-
       <LabDocs v-if="showDocs" @close="showDocs = false" />
     </div>
-  </div>
+  </CommonGridBackground>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import TypeIt from "typeit";
 
 useHead({
   title: "Humanify",
@@ -80,6 +100,7 @@ const results = ref([]);
 const isRunning = ref(false);
 const showDocs = ref(false);
 const colorMode = useColorMode();
+const typeItTarget = ref(null);
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
@@ -90,6 +111,15 @@ const humyExplanation = ref("");
 const humyLoading = ref(false);
 
 const latestResult = computed(() => results.value[0] || null);
+
+onMounted(() => {
+  new TypeIt(typeItTarget.value, {
+    speed: 100,
+    cursor: false, // Cleaner look for a title
+  })
+    .type("Hi, Denys")
+    .go();
+});
 
 const runCode = async (code) => {
   isRunning.value = true;
@@ -136,13 +166,10 @@ const copyResult = async (result) => {
   if (!result || result.error) return;
   try {
     await navigator.clipboard.writeText(result.result);
-    // Optional: Show toast notification
   } catch (e) {
     console.error("Failed to copy", e);
   }
 };
-
-
 
 const askHumy = async (resultItem) => {
   humyExpression.value = resultItem.expression;
