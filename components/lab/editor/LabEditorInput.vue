@@ -6,11 +6,17 @@
     <div class="w-full max-w-3xl relative">
       <!-- Input Bar -->
       <div
-        class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-500 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 rounded-[24px] sm:rounded-[32px] shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50 transition-all duration-300 flex items-center p-2 pl-3 sm:pl-4 gap-2"
+        class="w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 rounded-[2rem] shadow-xl shadow-emerald-900/5 transition-all duration-300 flex items-center p-2 pl-4 gap-3"
         :class="{
           'border-emerald-500 ring-4 ring-emerald-500/10': isRunning,
         }"
       >
+        <!-- Leading Icon -->
+        <div
+          class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"
+        >
+          <Icon name="mynaui:math" size="18" />
+        </div>
         <!-- Suggestions Dropdown -->
         <div
           v-if="suggestions.length > 0"
@@ -108,9 +114,9 @@
           @input="handleInput"
           @keydown="handleKeydown"
           type="text"
-          class="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 text-sm sm:text-base focus:outline-none font-sans h-10 min-w-0"
+          class="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400/80 text-base sm:text-lg focus:outline-none font-sans font-medium tracking-tight h-10 min-w-0"
           spellcheck="false"
-          placeholder="Enter expression..."
+          placeholder="Calculate..."
         />
 
         <!-- Right Actions -->

@@ -7,7 +7,6 @@
       <div
         class="fixed top-0 right-3 sm:right-6 mt-3 sm:mt-4 z-30 flex items-center gap-2"
       >
-
         <button
           @click="toggleTheme"
           class="flex items-center justify-center w-10 h-10 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-500 transition-all text-gray-600 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 group cursor-pointer shadow-lg"
@@ -57,9 +56,15 @@
       </div>
 
       <!-- Humanify Animated Title -->
-      <div class="text-center sm:mt-0 px-4 select-none">
+      <div
+        class="text-center absolute top-1/2 left-0 w-full transform -translate-y-1/2 sm:static sm:transform-none sm:w-auto px-4 select-none transition-all duration-500 ease-in-out z-10"
+        :class="{
+          'opacity-0 scale-95 blur-sm pointer-events-none':
+            hasInput || isRunning || latestResult,
+        }"
+      >
         <h1
-          class="text-4xl sm:text-6xl font-semibold tracking-tighter bg-gradient-to-br from-emerald-800 to-emerald-600 dark:from-emerald-600 dark:to-emerald-400 bg-clip-text text-transparent font-['Outfit'] pb-4"
+          class="text-4xl sm:text-6xl font-semibold tracking-tighter bg-gradient-to-br from-emerald-800 to-emerald-600 dark:from-emerald-600 dark:to-emerald-400 bg-clip-text text-transparent font-['Outfit']"
         >
           <span ref="typeItTarget"></span>
         </h1>
@@ -75,6 +80,7 @@
         @copy="copyResult"
         @ask-humy="askHumy"
         @clear-explanation="humyExplanation = ''"
+        @input="hasInput = !!$event"
       />
       <LabDocs v-if="showDocs" @close="showDocs = false" />
     </div>
@@ -99,6 +105,7 @@ useHead({
 const results = ref([]);
 const isRunning = ref(false);
 const showDocs = ref(false);
+const hasInput = ref(false);
 const colorMode = useColorMode();
 const typeItTarget = ref(null);
 
@@ -117,13 +124,13 @@ onMounted(() => {
     speed: 100,
     cursor: false, // Cleaner look for a title
   })
-    .type("Hi, Denys")
+    .type("Humanify")
     .go();
 });
 
 const runCode = async (code) => {
   isRunning.value = true;
-  humyExplanation.value = ""; // Clear explanation on new run
+  humyExplanation.value = ""; // Clear explan`ation on new run
   const startTime = performance.now();
 
   try {

@@ -3,9 +3,6 @@
 
 
 
-body {
-  @apply bg-emerald-50 text-gray-600;
-}
 
 @keyframes fade-in {
   from {

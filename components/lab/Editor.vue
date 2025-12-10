@@ -12,6 +12,7 @@
       @copy="$emit('copy', $event)"
       @ask-humy="$emit('ask-humy', $event)"
       @clear-explanation="$emit('clear-explanation')"
+      @recalculate="handleRecalculate"
     />
 
     <!-- Input Area (Footer) -->
@@ -51,6 +52,7 @@ const emit = defineEmits([
   "ask-humy",
   "download",
   "clear-explanation",
+  "input",
 ]);
 
 const code = ref("");
@@ -85,6 +87,11 @@ const runCodeWithHistory = () => {
   }, 500);
 };
 
+const handleRecalculate = (newCode: string) => {
+  code.value = newCode;
+  runCodeWithHistory();
+};
+
 watch(
   () => props.result,
   (newResult) => {
@@ -95,7 +102,8 @@ watch(
   }
 );
 
-watch(code, () => {
+watch(code, (newVal) => {
+  emit("input", newVal);
   if (props.explanation) {
     emit("clear-explanation");
   }
