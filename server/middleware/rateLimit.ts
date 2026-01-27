@@ -8,18 +8,8 @@ type RateLimitEntry = {
 
 const rateLimitStore = new Map<string, RateLimitEntry>();
 
-// Очищення застарілих записів кожні 5 хвилин
-setInterval(
-  () => {
-    const now = Date.now();
-    for (const [key, entry] of rateLimitStore.entries()) {
-      if (entry.resetAt < now) {
-        rateLimitStore.delete(key);
-      }
-    }
-  },
-  5 * 60 * 1000,
-);
+// ВАЖЛИВО: setInterval не можна використовувати в global scope в Cloudflare Workers
+// Замість цього виконуємо очищення під час кожної перевірки (inline cleanup)
 
 export default defineEventHandler(async (event) => {
   // Застосовуємо тільки до API routes
@@ -35,6 +25,14 @@ export default defineEventHandler(async (event) => {
   const now = Date.now();
   const windowMs = 60 * 1000; // 1 хвилина
   const maxRequests = 30; // 30 запитів на хвилину
+
+  // Inline cleanup: видаляємо застарілі записи під час перевірки
+  // Це замінює setInterval, який не працює в Cloudflare Workers
+  for (const [key, entry] of rateLimitStore.entries()) {
+    if (entry.resetAt < now) {
+      rateLimitStore.delete(key);
+    }
+  }
 
   // Отримуємо або створюємо запис
   let entry = rateLimitStore.get(identifier);

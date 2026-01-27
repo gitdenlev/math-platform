@@ -7,6 +7,7 @@ export type AIMessage = {
 };
 
 // Створення клієнта OpenRouter
+// ВАЖЛИВО: Викликається всередині handler-ів, а не в глобальному scope
 const getOpenRouterClient = () => {
   const config = useRuntimeConfig();
   const apiKey = config.openrouterApiKey;

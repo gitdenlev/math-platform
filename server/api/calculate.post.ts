@@ -1,20 +1,31 @@
-import { create, all } from "mathjs";
+import { create, all, type MathJsInstance } from "mathjs";
 
-// Створюємо sandboxed екземпляр MathJS з обмеженими функціями
-const math = create(all);
+// ВАЖЛИВО: Не створюємо екземпляр в глобальному scope (Cloudflare Workers обмеження)
+// Замість цього створюємо функцію, яка повертає налаштований екземпляр
 
-// КРИТИЧНО: Вимикаємо небезпечні функції для запобігання code injection
-const restrictedFunctions = {
-  import: function () {
-    throw new Error("Function import is disabled for security reasons");
-  },
-  createUnit: function () {
-    throw new Error("Function createUnit is disabled for security reasons");
-  },
-  // Evaluate і parse вже використовуються, але обмежуємо їх контекст
-};
+let mathInstance: MathJsInstance | null = null;
 
-math.import(restrictedFunctions, { override: true });
+function getMathInstance(): MathJsInstance {
+  if (!mathInstance) {
+    // Створюємо sandboxed екземпляр MathJS з обмеженими функціями
+    mathInstance = create(all);
+
+    // КРИТИЧНО: Вимикаємо небезпечні функції для запобігання code injection
+    const restrictedFunctions = {
+      import: function () {
+        throw new Error("Function import is disabled for security reasons");
+      },
+      createUnit: function () {
+        throw new Error("Function createUnit is disabled for security reasons");
+      },
+      // Evaluate і parse вже використовуються, але обмежуємо їх контекст
+    };
+
+    mathInstance.import(restrictedFunctions, { override: true });
+  }
+
+  return mathInstance;
+}
 
 // Функція для безпечної валідації виразу
 function validateExpression(expression: string): void {
@@ -55,6 +66,9 @@ export default defineEventHandler(async (event) => {
   try {
     // Валідуємо вираз перед виконанням
     validateExpression(expression);
+
+    // Отримуємо екземпляр MathJS (lazy initialization)
+    const math = getMathInstance();
 
     const result = math.evaluate(expression);
 
