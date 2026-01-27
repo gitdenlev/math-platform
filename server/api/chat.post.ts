@@ -1,15 +1,20 @@
 import { MATH_TEACHER_PROMPT } from "~/server/constants/prompts";
-import { getGeminiModel } from "~/server/utils/ai";
+import { generateAIResponse } from "~/server/utils/ai";
+import { z } from "zod";
 
-interface ChatMessage {
-  role: "user" | "model";
-  parts: { text: string }[];
-}
+// Строга валідація з Zod
+const ChatMessageSchema = z.object({
+  role: z.enum(["user", "assistant"]),
+  content: z.string().min(1).max(2000),
+});
 
-interface RequestBody {
-  message: string;
-  history?: ChatMessage[];
-}
+const RequestBodySchema = z.object({
+  message: z.string().min(1).max(2000).trim(),
+  history: z.array(ChatMessageSchema).max(50).optional().default([]),
+});
+
+type ChatMessage = z.infer<typeof ChatMessageSchema>;
+type RequestBody = z.infer<typeof RequestBodySchema>;
 
 export default defineEventHandler(async (event) => {
   if (event.node.req.method !== "POST") {
@@ -20,46 +25,24 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const body = await readBody(event);
+    // Валідуємо з Zod (автоматично кине помилку якщо невалідно)
+    const body = RequestBodySchema.parse(await readBody(event));
     const { message, history = [] } = body;
 
-    if (!message || typeof message !== "string" || !message.trim()) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Message cannot be empty",
-      });
-    }
+    // Формуємо контекст з історії чату
+    const contextMessages = history
+      .slice(-10) // Останні 10 повідомлень для контексту
+      .map(
+        (msg) =>
+          `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}`,
+      )
+      .join("\n");
 
-    if (message.length > 2000) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Message too long. Maximum 2000 characters.",
-      });
-    }
+    const fullPrompt = contextMessages
+      ? `Previous conversation:\n${contextMessages}\n\nUser: ${message.trim()}\n\nRespond as the assistant:`
+      : message.trim();
 
-    if (history && (!Array.isArray(history) || history.length > 50)) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Invalid chat history",
-      });
-    }
-
-    // Initialize model using the utility
-    const model = getGeminiModel(MATH_TEACHER_PROMPT);
-
-    const chat = model.startChat({
-      history: history as ChatMessage[],
-    });
-
-    const result = await Promise.race([
-      chat.sendMessage(message.trim()),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Timeout")), 30000)
-      ),
-    ]);
-
-    const response = await (result as any).response;
-    const text = response.text();
+    const text = await generateAIResponse(fullPrompt, MATH_TEACHER_PROMPT);
 
     if (!text || text.trim() === "") {
       throw new Error("Empty response from AI");
@@ -70,28 +53,18 @@ export default defineEventHandler(async (event) => {
       message: text,
       newHistory: [
         ...history.slice(-18),
-        { role: "user" as const, parts: [{ text: message.trim() }] },
-        { role: "model" as const, parts: [{ text: text }] },
+        { role: "user" as const, content: message.trim() },
+        { role: "assistant" as const, content: text },
       ],
     };
   } catch (error: any) {
-    console.error("Error calling Gemini API:", error);
+    console.error("Error in chat API:", error);
 
-    if (
-      error.message?.includes("API_KEY") ||
-      (error.statusCode === 500 &&
-        error.statusMessage === "GEMINI_API_KEY is not set")
-    ) {
+    // Обробка Zod validation errors
+    if (error.name === "ZodError") {
       throw createError({
-        statusCode: 500,
-        statusMessage: "API authorization error",
-      });
-    }
-
-    if (error.message?.includes("quota") || error.message?.includes("limit")) {
-      throw createError({
-        statusCode: 429,
-        statusMessage: "Rate limit exceeded",
+        statusCode: 400,
+        statusMessage: `Validation error: ${error.errors.map((e: any) => e.message).join(", ")}`,
       });
     }
 

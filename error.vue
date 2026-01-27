@@ -8,8 +8,8 @@
       class="fixed top-6 right-6 flex items-center justify-center w-12 h-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-500 transition-all text-gray-600 dark:text-gray-300 hover:text-emerald-700 dark:hover:text-emerald-400 shadow-lg hover:shadow-xl z-50"
       :title="
         colorMode.value === 'dark'
-          ? 'Switch to Light Mode'
-          : 'Switch to Dark Mode'
+          ? 'Переключити на світлу тему'
+          : 'Переключити на темну тему'
       "
     >
       <Icon
@@ -59,7 +59,7 @@
           class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
         >
           <Icon name="ph:house-bold" size="20" />
-          <span>Go to Homepage</span>
+          <span>На головну</span>
         </NuxtLink>
       </div>
     </div>
@@ -79,24 +79,24 @@ const toggleTheme = () => {
 
 const getErrorTitle = (code: number) => {
   const titles: Record<number, string> = {
-    404: "Page Not Found",
-    500: "Server Error",
-    403: "Access Forbidden",
-    401: "Unauthorized",
+    404: "Сторінку не знайдено",
+    500: "Помилка сервера",
+    403: "Доступ заборонено",
+    401: "Неавторизовано",
   };
-  return titles[code] || "Oops! Something went wrong";
+  return titles[code] || "Ой! Щось пішло не так";
 };
 
 const getErrorMessage = (code: number) => {
   const messages: Record<number, string> = {
-    404: "The page you are looking for doesn't exist or has been moved.",
-    500: "We're experiencing some technical difficulties. Please try again later.",
-    403: "You don't have permission to access this page.",
-    401: "You need to be logged in to access this page.",
+    404: "Сторінка, яку ви шукаєте, не існує або була переміщена.",
+    500: "Ми стикаємося з технічними труднощами. Будь ласка, спробуйте пізніше.",
+    403: "У вас немає дозволу на перегляд цієї сторінки.",
+    401: "Вам потрібно увійти в систему, щоб переглянути цю сторінку.",
   };
   return (
     messages[code] ||
-    "An unexpected error occurred. Please try again or contact support."
+    "Виникла неочікувана помилка. Будь ласка, спробуйте ще раз або зверніться до служби підтримки."
   );
 };
 </script>

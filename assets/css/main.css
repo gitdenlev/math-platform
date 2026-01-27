@@ -1,8 +1,30 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+/* Шрифт Inter застосовується автоматично через tailwind.config.ts */
 
+*:focus {
+  outline: none !important;
+}
 
+*:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[contenteditable="true"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove default webkit tap highlight */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
 
 @keyframes fade-in {
   from {

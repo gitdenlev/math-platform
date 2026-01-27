@@ -8,6 +8,10 @@ export default <Partial<Config>>{
           600: "#16A34A", // Main website color
         },
       },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+        mono: ["Inter", "system-ui", "sans-serif"],
+      },
     },
   },
   plugins: [],

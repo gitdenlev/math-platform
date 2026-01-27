@@ -11,6 +11,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
   modules: [
+    "@pinia/nuxt",
     "@nuxt/eslint",
     "@nuxt/fonts",
     "@nuxt/icon",
@@ -18,11 +19,26 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxtjs/color-mode",
     "nuxt-vuefire",
+    "@nuxtjs/supabase",
   ],
 
   icon: {
     serverBundle: {
       collections: ["ph", "streamline-flex", "svg-spinners", "pajamas"],
+    },
+  },
+
+  fonts: {
+    families: [
+      {
+        name: "Inter",
+        provider: "google",
+        weights: [400, 500, 600, 700],
+      },
+    ],
+    defaults: {
+      weights: [400, 500, 600, 700],
+      styles: ["normal"],
     },
   },
 
@@ -39,6 +55,15 @@ export default defineNuxtConfig({
     analytics: true,
   },
 
+  supabase: {
+    redirect: false,
+    redirectOptions: {
+      login: "/login",
+      callback: "/confirm",
+      exclude: [],
+    },
+  },
+
   app: {
     head: {
       title: "Humanify - Програмуй Математично",
@@ -53,8 +78,8 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    // GEMINI_API_KEY повинен бути тут, щоб він був доступний лише на сервері
-    geminiApiKey: process.env.GEMINI_API_KEY, // <--- Важливо: без NUXT_PUBLIC_
+    // OpenRouter API configuration
+    openrouterApiKey: process.env.OPENROUTER_API_KEY,
     public: {
       // Firebase ключі тут, оскільки вони потрібні на клієнті для VueFire
       firebaseApiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,

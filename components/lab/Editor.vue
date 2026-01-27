@@ -1,9 +1,10 @@
 <template>
   <div
-    class="flex flex-col text-gray-900 dark:text-gray-100 font-sans selection:bg-emerald-400 text-emerald-900 h-full"
+    class="flex flex-col text-zinc-900 dark:text-zinc-100 font-sans selection:bg-zinc-200 dark:selection:bg-zinc-700 h-full"
   >
     <!-- Main Content Area (Results) -->
     <LabEditorResult
+      v-if="result"
       class="flex-1 overflow-y-auto"
       ref="resultRef"
       :result="result"
@@ -99,16 +100,19 @@ watch(
       addToHistory(lastRunCode.value, newResult);
       lastRunCode.value = ""; // Reset
     }
-  }
+  },
 );
 
 watch(code, (newVal) => {
   emit("input", newVal);
-  if (props.explanation) {
-    emit("clear-explanation");
-  }
-  if (resultRef.value) {
-    resultRef.value.closeExplanation();
+  // Only clear explanation if user starts typing new code (not when clearing)
+  if (newVal) {
+    if (props.explanation) {
+      emit("clear-explanation");
+    }
+    if (resultRef.value) {
+      resultRef.value.closeExplanation();
+    }
   }
 });
 
