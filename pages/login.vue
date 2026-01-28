@@ -110,7 +110,6 @@ useHead({
 
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
-const router = useRouter();
 
 const loading = ref(false);
 const successMessage = ref("");
@@ -119,11 +118,15 @@ const form = reactive({
   email: "",
 });
 
-watchEffect(() => {
-  if (user.value) {
-    router.push("/");
-  }
-});
+watch(
+  user,
+  (currentUser) => {
+    if (currentUser) {
+      return navigateTo("/");
+    }
+  },
+  { immediate: true },
+);
 
 const handleMagicLink = async () => {
   try {

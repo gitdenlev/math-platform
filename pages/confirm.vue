@@ -47,14 +47,18 @@ useHead({
 });
 
 const user = useSupabaseUser();
-const router = useRouter();
+
 const error = ref<string | null>(null);
 
-watchEffect(() => {
-  if (user.value) {
-    router.push("/");
-  }
-});
+watch(
+  user,
+  (currentUser) => {
+    if (currentUser) {
+      return navigateTo("/");
+    }
+  },
+  { immediate: true },
+);
 
 onMounted(async () => {
   // Give Supabase time to process the auth callback
