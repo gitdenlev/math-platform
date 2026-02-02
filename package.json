@@ -20,7 +20,7 @@
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/supabase": "^2.0.3",
     "@openrouter/sdk": "^0.4.0",
-    "@pinia/nuxt": "^0.9.0",
+    "@pinia/nuxt": "^0.11.3",
     "@tailwindcss/vite": "^4.1.6",
     "dompurify": "^3.3.1",
     "eslint": "^9.26.0",
